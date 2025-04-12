@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LoocalSearch from "@/components/search/LoocalSearch";
 
 import { Button } from "@/components/ui/button";
@@ -42,11 +43,17 @@ interface searchParams {
 }
 
 const Home = async ({searchParams}: searchParams) => {
-  const {query = ''} = await searchParams;
+  const {query = '', filter = ''} = await searchParams;
 
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query?.toLowerCase())
-  );
+  const filteredQuestions = questions.filter((question) => {
+    const matchesQuery = question.title.toLowerCase().includes(query?.toLowerCase())
+
+    const matchesFilter = filter
+      ? question.tags[0].name.toLowerCase() === filter.toLowerCase()
+      : true
+
+    return matchesQuery && matchesFilter
+  });
 
   return (
     <>
@@ -71,7 +78,7 @@ const Home = async ({searchParams}: searchParams) => {
         />
       </section>
         
-        {/* HomeFilter */}
+      <HomeFilter />
 
       <div className='mt-10 flex w-full flex-col gap-6'>
         {filteredQuestions.map((question) => (

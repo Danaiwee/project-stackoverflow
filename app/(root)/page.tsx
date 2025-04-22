@@ -5,6 +5,8 @@ import LoocalSearch from "@/components/search/LoocalSearch";
 
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/route";
+import { api } from "@/lib/api";
+import handleError from "@/lib/handlers/error";
 import Link from "next/link";
 import React from "react";
 
@@ -49,11 +51,23 @@ const questions = [
   },
 ];
 
+// const test = async () => {
+//   try {
+//     return await api.users.getAll();
+
+//   } catch (error) {
+//     return handleError(error)
+//   }
+// }
+
 interface searchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: searchParams) => {
+  // const users = await test();
+  // console.log("users: ", users);
+
   const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {

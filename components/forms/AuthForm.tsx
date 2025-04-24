@@ -22,12 +22,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/route";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 
@@ -37,14 +39,30 @@ const AuthForm = <T extends FieldValues>({
   formType,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    // TODO: Authenticate User
-    console.log("Try to log data: ", data);
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if(result?.success) {
+      toast("Sucess", {
+        description: formType === "SIGN_IN"
+          ? "Signed in successfully"
+          : "Signed up successfully"
+      });
+
+      router.push(ROUTES.HOME);
+
+    } else {
+      toast(`Error ${result?.status}`, {
+        description: result?.error?.message
+      })
+    }
   };
 
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
@@ -83,7 +101,7 @@ const AuthForm = <T extends FieldValues>({
 
         <Button
           disabled={form.formState.isSubmitting}
-          className="primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 font-inter !text-light-900"
+          className="primary-gradient paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 font-inter !text-light-900 cursor-pointer"
         >
           {form.formState.isSubmitting
             ? buttonText === "Sign In"

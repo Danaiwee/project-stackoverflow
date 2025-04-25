@@ -106,7 +106,7 @@ export async function editQuestion(
 
         if(!question) throw new NotFoundError("Question");
 
-        if(question.author.toString() !== userId) throw new Error("Unaithorized");
+        if(question.author.toString() !== userId) throw new Error("Unauthorized");
 
         if (question.title !== title || question.content !== content) {
             question.title = title;

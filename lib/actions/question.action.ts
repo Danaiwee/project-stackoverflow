@@ -11,7 +11,7 @@ import TagQuestion from "@/database/tag-question.model";
 
 export async function createQuestion(
     params: CreateQuestionParams
-): Promise<ActionResponse> {
+): Promise<ActionResponse<Question>> {
 
     const validationResult = await action({
         params,
@@ -44,15 +44,18 @@ export async function createQuestion(
 
         for(const tag of tags) {
             const existingTag = await Tag.findOneAndUpdate(
-                {name: {$regex: new RegExp(`^${tag}$`, 'i')}},
-                {$setOnInsert : {name: tag}, $inc: {question: 1}},
+                {name: {$regex: new RegExp(`^${tag}$`, "i")}},
+                {$setOnInsert : {name: tag}, $inc: {questions: 1}},
                 {upsert: true, new: true, session}
             );
 
             tagIds.push(existingTag._id);
+
             tagQuestionDocuments.push(
-                {tag: existingTag._id},
-                {question: question._id}
+                {
+                    tag: existingTag._id,
+                    question: question._id
+                },
             );
         };
 

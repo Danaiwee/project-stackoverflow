@@ -74,7 +74,7 @@ export const getTags = async(
     }
 };
 
-export const getTagQuestons = async(
+export const getTagQuestions = async(
     params: GetTagQuestionParams,
 ): Promise<ActionResponse<{tag: Tag; questions: Question[]; isNext: boolean}>> => {
     
@@ -108,7 +108,7 @@ export const getTagQuestons = async(
         const questions = await Question.find(filterQuery)
             .select("_id title views answers upvotes downvotes author createdAt")
             .populate([
-                {path: "authro", select: "name image"},
+                {path: "author", select: "name image"},
                 {path: "tags", select: "name"},
             ])
             .skip(skip)

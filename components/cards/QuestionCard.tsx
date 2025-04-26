@@ -76,7 +76,7 @@ const QuestionCard = ({
                 />
 
                 <Metric 
-                    imageUrl="icons/eye.svg"
+                    imageUrl="/icons/eye.svg"
                     alt="views"
                     value={views}
                     title=" Views"

@@ -155,4 +155,8 @@ export const AnswerSchema = z.object({
   content: z.string().min(30, {message: "Answer must contain at least 30 characters long."})
 });
 
+export const AnswerServerSchema = AnswerSchema.extend({
+  questionId: z.string().min(1, {message: "Question ID is requried"})
+});
+
 

@@ -92,7 +92,7 @@ const QuestionDetails = async (
       </div>
 
       <section className='my-5'>
-        <AnswerForm />
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   )

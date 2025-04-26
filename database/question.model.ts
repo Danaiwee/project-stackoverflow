@@ -7,7 +7,7 @@ export interface IQuestion {
     views: string;
     upvotes: number;
     downvotes: string;
-    answer: number;
+    answers: number;
     author: Types.ObjectId;
 }
 

@@ -3,10 +3,11 @@ import { Preview } from '@/components/editor/Preview';
 import Metric from '@/components/Metric';
 import UserAvatar from '@/components/UserAvatar';
 import ROUTES from '@/constants/route';
-import { getQuestion } from '@/lib/actions/question.action';
+import { getQuestion, incrementViews } from '@/lib/actions/question.action';
 import { formatNumber, getTimestamp } from '@/lib/utils';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { after } from 'next/server';
 import React from 'react'
 
 const QuestionDetails = async (
@@ -14,6 +15,10 @@ const QuestionDetails = async (
 ) => {
   const {id} = await params;
   const {success, data: question} = await getQuestion({questionId: id});
+
+  after(async() => {
+    await incrementViews({questionId: id});
+  });
 
   if(!success || !question) return redirect("/404");
   

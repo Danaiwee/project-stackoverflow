@@ -3,11 +3,13 @@
 import Question, { IQuestionDoc } from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, PaginatedSearchParamsSchema } from "../validations";
+import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, incrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
 import mongoose, { FilterQuery } from 'mongoose';
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
 import { NotFoundError } from "../http-errors";
+import { revalidatePath } from "next/cache";
+import ROUTES from "@/constants/route";
 
 
 export async function createQuestion(
@@ -290,4 +292,42 @@ export async function getQuestions(
     } catch (error) {
         return handleError(error) as ErrorResponse
     }
-}
+};
+
+export async function incrementViews(
+    params: IncrementViewsParams
+): Promise<ActionResponse<{views: number}>> {
+
+    const validationResult = await action({
+        params,
+        schema: incrementViewsSchema
+    });
+
+    if(validationResult instanceof Error) {
+        return handleError(validationResult) as ErrorResponse
+    };
+
+    const {questionId} = await validationResult.params!;
+
+    try {
+        const question = await Question.findById(questionId);
+
+        if(!question) {
+            throw new Error("Question not found");
+        };
+
+        question.views += 1;
+
+        await question.save();
+
+        revalidatePath(ROUTES.QUESTION(questionId));
+
+        return {
+            success: true,
+            data: {views: question.views}
+        };
+
+    } catch (error) {
+        return handleError(error) as ErrorResponse;
+    }
+};

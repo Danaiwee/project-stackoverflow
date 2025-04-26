@@ -20,7 +20,7 @@ const questionSchema = new Schema({
     views: {type: Number, default: 0},
     upvotes: {type: Number, default: 0},
     downvotes: {type: Number, default: 0},
-    answer: {type: Number, default: 0},
+    answers: {type: Number, default: 0},
     author: {type: Schema.Types.ObjectId, ref: "User", required: true},
 }, {timestamps: true});
 

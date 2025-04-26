@@ -2,7 +2,7 @@ import { auth, signOut } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import HomeFilter from "@/components/filters/HomeFilter";
-import LoocalSearch from "@/components/search/LoocalSearch";
+import LocalSearch from "@/components/search/LocalSearch";
 
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/route";
@@ -41,7 +41,7 @@ const Home = async ({ searchParams }: searchParams) => {
       </section>
 
       <section className="mt-11">
-        <LoocalSearch
+        <LocalSearch
           route="/"
           imageSrc="/icons/search.svg"
           placeholder="Search for Question Here..."

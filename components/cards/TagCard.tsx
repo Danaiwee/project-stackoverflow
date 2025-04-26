@@ -1,5 +1,5 @@
 import ROUTES from "@/constants/route";
-import { getDeviconClassName } from "@/lib/utils";
+import { cn, getDeviconClassName, getTechDescription } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 import { Badge } from "../ui/badge";
@@ -27,6 +27,11 @@ const TagCard = ({
   handleRemove,
 }: Props) => {
   const iconClass = getDeviconClassName(name);
+  const iconDescripiton = getTechDescription(name);
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+  };
 
   const content = (
     <>
@@ -37,14 +42,14 @@ const TagCard = ({
         </div>
 
         {remove && (
-            <Image 
-                src='/icons/close.svg'
-                width={12}
-                height={12}
-                alt='close icon'
-                className='cursor-pointer object-contain invert-0 dark:invert'
-                onClick={handleRemove}
-            />
+          <Image
+            src="/icons/close.svg"
+            width={12}
+            height={12}
+            alt="close icon"
+            className="cursor-pointer object-contain invert-0 dark:invert"
+            onClick={handleRemove}
+          />
         )}
       </Badge>
 
@@ -54,17 +59,40 @@ const TagCard = ({
     </>
   );
 
-  if(compact) {
+  if (compact) {
     return isButton ? (
-        <button type='button' className='flex justify-between gap-2'>
-            {content}
-        </button>
+      <button type="button" className="flex justify-between gap-2">
+        {content}
+      </button>
     ) : (
-        <Link href={ROUTES.TAG(_id)} className="flex justify-between gap-2">
-            {content}
-        </Link>
-    )
+      <Link href={ROUTES.TAG(_id)} className="flex justify-between gap-2">
+        {content}
+      </Link>
+    );
   }
+
+  return (
+    <Link href={ROUTES.TAG(_id)} className='shadow-light100_darknone'>
+      <article className='background-light900_dark200 light-border flex w-full flex-col rounded-2xl border px-8 py-10 sm:w-[260px]'>
+        <div className='flex items-center justify-between gap-3'>
+          <div className='background-light800_dark400 w-fit rounded-sm px-5 py-1.5'>
+            <p className='paragraph-semibold text-dark300_ligh900'>{name}</p>
+          </div>
+          <i className={cn(iconClass, "text-2xl")} aria-hidden="true" />
+        </div>
+
+        <p className='small-regular text-dark500_light700 mt-5 line-clamp-3 w-full'>
+          {iconDescripiton}
+        </p>
+
+        <p className='small-medium text-dark400_light500 mt-3.5'>
+          <span className='body-semibold primary-text-gradient mr-2.5'>
+            {questions}+
+          </span>
+        </p>
+      </article>
+    </Link>
+  )
 };
 
 export default TagCard;

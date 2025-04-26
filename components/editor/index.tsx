@@ -1,65 +1,64 @@
 "use client";
 
 import {
+  MDXEditor,
+  UndoRedo,
   BoldItalicUnderlineToggles,
-  ChangeCodeMirrorLanguage,
-  codeBlockPlugin,
-  codeMirrorPlugin,
-  ConditionalContents,
-  CreateLink,
-  diffSourcePlugin,
-  headingsPlugin,
-  imagePlugin,
+  toolbarPlugin,
+  CodeToggle,
   InsertCodeBlock,
+  codeBlockPlugin,
+  headingsPlugin,
+  listsPlugin,
+  linkPlugin,
+  quotePlugin,
+  markdownShortcutPlugin,
+  ListsToggle,
+  linkDialogPlugin,
+  CreateLink,
   InsertImage,
   InsertTable,
-  InsertThematicBreak,
-  linkDialogPlugin,
-  linkPlugin,
-  listsPlugin,
-  ListsToggle,
-  markdownShortcutPlugin,
-  MDXEditor,
-  MDXEditorMethods,
-  quotePlugin,
-  Separator,
   tablePlugin,
-  thematicBreakPlugin,
-  toolbarPlugin,
-  UndoRedo,
+  imagePlugin,
+  codeMirrorPlugin,
+  ConditionalContents,
+  ChangeCodeMirrorLanguage,
+  Separator,
+  InsertThematicBreak,
+  diffSourcePlugin,
+  MDXEditorMethods,
 } from "@mdxeditor/editor";
-import { useTheme } from "next-themes";
-import React, { ForwardedRef } from "react";
 import { basicDark } from "cm6-theme-basic-dark";
+import { useTheme } from "next-themes";
+import { Ref } from "react";
 
 import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
 
 interface Props {
   value: string;
-  fieldChange: (data: string) => void;
-  editorRef: ForwardedRef<MDXEditorMethods> | null;
+  editorRef: Ref<MDXEditorMethods> | null;
+  fieldChange: (value: string) => void;
 }
 
-const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
+const Editor = ({ value, editorRef, fieldChange }: Props) => {
   const { resolvedTheme } = useTheme();
 
-  const theme = resolvedTheme === "dark" ? [basicDark] : [];
+  const themeExtension = resolvedTheme === "dark" ? [basicDark] : [];
 
   return (
     <MDXEditor
       key={resolvedTheme}
       markdown={value}
       ref={editorRef}
-      className="background-light800_dark200 light-border-2 markdown-editor dark-editor w-full border rounded-[10px]"
       onChange={fieldChange}
+      className="background-light800_dark200 light-border-2 markdown-editor dark-editor grid w-full border"
       plugins={[
         headingsPlugin(),
         listsPlugin(),
         linkPlugin(),
         linkDialogPlugin(),
         quotePlugin(),
-        thematicBreakPlugin(),
         markdownShortcutPlugin(),
         tablePlugin(),
         imagePlugin(),
@@ -70,7 +69,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
             txt: "txt",
             sql: "sql",
             html: "html",
-            saas: "saas",
+            sass: "sass",
             scss: "scss",
             bash: "bash",
             json: "json",
@@ -81,7 +80,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
             jsx: "JavaScript (React)",
           },
           autoLoadLanguageSupport: true,
-          codeMirrorExtensions: theme,
+          codeMirrorExtensions: themeExtension,
         }),
         diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
         toolbarPlugin({
@@ -94,11 +93,12 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
                 },
                 {
                   fallback: () => (
-                    <div className='flex flex-wrap'>
+                    <>
                       <UndoRedo />
                       <Separator />
 
                       <BoldItalicUnderlineToggles />
+                      <CodeToggle />
                       <Separator />
 
                       <ListsToggle />
@@ -110,9 +110,10 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
 
                       <InsertTable />
                       <InsertThematicBreak />
+                      <Separator />
 
                       <InsertCodeBlock />
-                    </div>
+                    </>
                   ),
                 },
               ]}
@@ -120,7 +121,6 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
           ),
         }),
       ]}
-      {...props}
     />
   );
 };

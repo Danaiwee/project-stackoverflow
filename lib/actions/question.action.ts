@@ -3,7 +3,7 @@
 import Question, { IQuestionDoc } from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, incrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
+import { AskQuestionSchema, EditQuestionSchema, GetQuestionSchema, IncrementViewsSchema, PaginatedSearchParamsSchema } from "../validations";
 import mongoose, { FilterQuery } from 'mongoose';
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
@@ -300,7 +300,7 @@ export async function incrementViews(
 
     const validationResult = await action({
         params,
-        schema: incrementViewsSchema
+        schema: IncrementViewsSchema
     });
 
     if(validationResult instanceof Error) {

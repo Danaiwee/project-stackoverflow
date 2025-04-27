@@ -159,4 +159,8 @@ export const AnswerServerSchema = AnswerSchema.extend({
   questionId: z.string().min(1, {message: "Question ID is requried"})
 });
 
+export const GetAnswerSchema = PaginatedSearchParamsSchema.extend({
+  questionId: z.string().min(1, {message: "Question ID is required."})
+});
+
 

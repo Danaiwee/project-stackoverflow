@@ -44,7 +44,7 @@ interface Props {
 const Editor = ({ value, editorRef, fieldChange }: Props) => {
   const { resolvedTheme } = useTheme();
 
-  const themeExtension = resolvedTheme === "dark" ? [basicDark] : [];
+  const theme = resolvedTheme === "dark" ? [basicDark] : [];
 
   return (
     <MDXEditor
@@ -80,7 +80,7 @@ const Editor = ({ value, editorRef, fieldChange }: Props) => {
             jsx: "JavaScript (React)",
           },
           autoLoadLanguageSupport: true,
-          codeMirrorExtensions: themeExtension,
+          codeMirrorExtensions: theme,
         }),
         diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
         toolbarPlugin({

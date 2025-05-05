@@ -3,7 +3,7 @@ import {Document, Schema, Types, model, models} from 'mongoose';
 export interface IQuestion {
     title: string;
     content: string;
-    tags: string;
+    tags: Types.ObjectId[];
     views: string;
     upvotes: number;
     downvotes: string;

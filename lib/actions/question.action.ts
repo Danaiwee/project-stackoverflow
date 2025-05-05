@@ -85,7 +85,7 @@ export async function createQuestion(
 
 export async function editQuestion(
     params: EditQuestionParams
-): Promise<ActionResponse<IQuestionDoc>> {
+): Promise<ActionResponse<Question>> {
 
     const validationResult = await action({
         params,
@@ -233,7 +233,7 @@ export async function getQuestions(
         return handleError(validationResult) as ErrorResponse
     };
 
-    const {page = 1, pageSize = 10, query, filter} = params;
+    const {page = 1, pageSize = 10, query, filter} = validationResult.params!;
     const skip = (Number(page) - 1) * pageSize;
     const limit = Number(pageSize);
 
